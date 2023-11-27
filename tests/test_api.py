@@ -26,7 +26,7 @@ def test_modified_readme_example(capsys):
     from liquidctl import find_liquidctl_devices
 
     # Find all connected and supported devices.
-    devices = find_liquidctl_devices(bus='virtual')  # readme: remove `bus` argument
+    devices = find_liquidctl_devices(bus='Virtual')  # readme: remove `bus` argument
 
     for dev in devices:
 
@@ -66,7 +66,7 @@ def test_modified_readme_example(capsys):
     # end of modified example; check that it more or less did what it should
 
     out, _ = capsys.readouterr()
-    assert 'Virtual Bus Device (experimental) at virtual:virtual_address:' in out
+    assert 'Virtual Bus Device (experimental) at Virtual:virtual_address:' in out
     assert 'initialize' in out
     assert 'Firmware version: 3.14.16' in out
     assert 'get status' in out

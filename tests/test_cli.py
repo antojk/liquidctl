@@ -24,7 +24,7 @@ def main(monkeypatch, capsys):
 
 
 def test_json_list(main):
-    code, out, _ = main('test', '--bus', 'virtual', 'list', '--json')
+    code, out, _ = main('test', '--bus', 'Virtual', 'list', '--json')
     assert code == 0
 
     got = json.loads(out)
@@ -35,7 +35,7 @@ def test_json_list(main):
             'product_id': 0xabcd,
             'release_number': None,
             'serial_number': None,
-            'bus': 'virtual',
+            'bus': 'Virtual',
             'address': 'virtual_address',
             'port': None,
             'driver': 'VirtualBusDevice',
@@ -46,13 +46,13 @@ def test_json_list(main):
 
 
 def test_json_initialize(main):
-    code, out, _ = main('test', '--bus', 'virtual', 'initialize', '--json')
+    code, out, _ = main('test', '--bus', 'Virtual', 'initialize', '--json')
     assert code == 0
 
     got = json.loads(out)
     exp = [
         {
-            'bus': 'virtual',
+            'bus': 'Virtual',
             'address': 'virtual_address',
             'description': 'Virtual Bus Device',
             'status': [
@@ -64,13 +64,13 @@ def test_json_initialize(main):
 
 
 def test_json_status(main):
-    code, out, _ = main('test', '--bus', 'virtual', 'status', '--json')
+    code, out, _ = main('test', '--bus', 'Virtual', 'status', '--json')
     assert code == 0
 
     got = json.loads(out)
     exp = [
         {
-            'bus': 'virtual',
+            'bus': 'Virtual',
             'address': 'virtual_address',
             'description': 'Virtual Bus Device',
             'status': [

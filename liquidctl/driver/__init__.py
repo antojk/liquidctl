@@ -56,8 +56,12 @@ def find_liquidctl_devices(pick=None, **kwargs):
     """
     buses = sorted(find_all_subclasses(BaseBus),
                    key=lambda x: (x.__module__, x.__name__))
+    
     num = 0
+    bus_filter = kwargs.pop('bus', None)
     for bus_cls in buses:
+        if bus_filter and bus_filter not in bus_cls.__name__:
+            continue
         for dev in bus_cls().find_devices(**kwargs):
             if pick is not None:
                 if num == pick:

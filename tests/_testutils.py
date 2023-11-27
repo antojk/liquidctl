@@ -260,7 +260,7 @@ class VirtualBusDevice(BaseDriver):
 
     @property
     def bus(self):
-        return 'virtual'
+        return 'Virtual'
 
     @property
     def address(self):
