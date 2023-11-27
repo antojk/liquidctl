@@ -409,7 +409,7 @@ class HidapiDevice:
     def __init__(self, hidapi, hidapi_dev_info):
         self.api = hidapi
         self.hidinfo = hidapi_dev_info
-        self.hiddev = self.api.device()
+        self.hiddev = self.api.Device()
 
     def open(self):
         """Connect to the device."""

@@ -5,7 +5,7 @@ from liquidctl.driver.usb import HidapiDevice
 
 class _mockhidapi:
     @staticmethod
-    def device():
+    def Device():
         return _mockdevice()
 
 
