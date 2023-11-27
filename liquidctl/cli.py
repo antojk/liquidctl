@@ -80,7 +80,7 @@ import sys
 from numbers import Number
 from traceback import format_exception
 
-import colorlog
+from colorlog import ColoredFormatter
 from docopt import docopt
 
 from liquidctl import __version__
@@ -392,7 +392,7 @@ def main():
             'CRITICAL': 'red,bold,bg_white',
         }
 
-    log_fmtter = colorlog.TTYColoredFormatter(fmt=log_fmt, stream=sys.stderr,
+    log_fmtter = ColoredFormatter(fmt=log_fmt, stream=sys.stderr,
                                               log_colors=log_colors)
 
     log_handler = logging.StreamHandler()
