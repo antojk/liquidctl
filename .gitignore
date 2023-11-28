@@ -9,3 +9,4 @@ liquidctl/_version.py
 venv/
 .vscode/
 .coverage
+virtenv
