@@ -35,23 +35,6 @@ def dev():
 def test_opens(dev, monkeypatch):
     opened = False
 
-    def is_utf8(str):
-        """
-        Checks if a string is UTF-8 encoded.
-
-        Args:
-          string: The string to check.
-
-        Returns:
-          True if the string is UTF-8 encoded, False otherwise.
-        """
-
-        try:
-            str.decode('utf-8')
-            return True
-        except UnicodeDecodeError:
-            return False
-
     def _open_path(path):
         assert isinstance(path, bytes)
         nonlocal opened
@@ -66,7 +49,7 @@ def test_opens(dev, monkeypatch):
     def _open_vid_pid_serial(vendor_id, product_id, serial_number):
         assert isinstance(vendor_id, int)
         assert isinstance(product_id, int)
-        assert is_utf8(serial_number)
+        assert isinstance(serial_number, bytes)
         nonlocal opened
         opened = True
 
