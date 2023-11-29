@@ -419,7 +419,7 @@ class HidapiDevice:
         """
         if self.vendor_id is not None and self.product_id is not None and len(self.serial_number) > 0:
             self.hiddev.open(vendor_id=self.vendor_id, product_id=self.product_id,
-                             serial_number=self.serial_number.encode(encoding='utf_8', errors='replace'))
+                             serial_number=self.serial_number)
         elif self.vendor_id is not None and self.product_id is not None:
             self.hiddev.open(vendor_id=self.vendor_id, product_id=self.product_id)
         elif self.path:
