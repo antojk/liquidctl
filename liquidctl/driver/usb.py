@@ -136,7 +136,7 @@ class BaseUsbDriver(BaseDriver):
 
     @property
     def description(self):
-        """Human readable description of the corresponding device."""
+        """Human-readable description of the corresponding device."""
         return self._description
 
     @property
@@ -146,7 +146,7 @@ class BaseUsbDriver(BaseDriver):
 
     @property
     def product_id(self):
-        """16-bit umeric product identifier."""
+        """16-bit numeric product identifier."""
         return self.device.product_id
 
     @property
@@ -168,7 +168,7 @@ class BaseUsbDriver(BaseDriver):
     def address(self):
         """Address of the device on the corresponding bus, or None if N/A.
 
-        Dependendent on bus enumeration order.
+        Dependent on bus enumeration order.
         """
         return self.device.address
 
@@ -177,7 +177,7 @@ class BaseUsbDriver(BaseDriver):
         """Physical location of the device, or None if N/A.
 
         Tuple of USB port numbers, from the root hub to this device.  Not
-        dependendent on bus enumeration order.
+        dependent on bus enumeration order.
         """
         return self.device.port
 
@@ -409,11 +409,21 @@ class HidapiDevice:
     def __init__(self, hidapi, hidapi_dev_info):
         self.api = hidapi
         self.hidinfo = hidapi_dev_info
-        self.hiddev = self.api.Device()
+        self.hiddev = self.api.device()
 
     def open(self):
-        """Connect to the device."""
-        self.hiddev.open_path(self.hidinfo['path'])
+        """Connect to the device.
+
+        Prefer to use vendor id and product id to connect if available and  then
+        fallback to the device address
+        """
+        if self.vendor_id is not None and self.product_id is not None and len(self.serial_number) > 0:
+            self.hiddev.open(vendor_id=self.vendor_id, product_id=self.product_id,
+                             serial_number=self.serial_number.encode(encoding='utf_8', errors='replace'))
+        elif self.vendor_id is not None and self.product_id is not None:
+            self.hiddev.open(vendor_id=self.vendor_id, product_id=self.product_id)
+        elif self.path:
+            self.hiddev.open_path(self.hidinfo['path'])
 
     def close(self):
         """NOOP."""

@@ -37,13 +37,8 @@ def test_matches_platinum_and_pro_xt_coolers_regardless_of_hydro(monkeypatch):
 
     def mock_enumerate(vid=0, pid=0):
         return mock_hids
-    
-    def _mock_hid_init(self, vid=None, pid=None, serial=None, path=None):
-        return
 
     monkeypatch.setattr(hid, 'enumerate', mock_enumerate)
-    monkeypatch.setattr(hid.Device,'__init__',_mock_hid_init)
-    
 
     def find(match):
         return HydroPlatinum.find_supported_devices(match=match)

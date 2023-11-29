@@ -33,7 +33,7 @@ def _mock_hid_init(self, vid=None, pid=None, serial=None, path=None):
 
 def test_construct_with_raw_pyusb_handle(monkeypatch):
     monkeypatch.setattr(hid, 'enumerate', _mock_enumerate)
-    monkeypatch.setattr(hid.Device,'__init__',_mock_hid_init)
+    # monkeypatch.setattr(hid.Device,'__init__',_mock_hid_init)
     pyusb_handle = _MockPyUsbHandle(serial_number='_89')
     liquidctl_device = Kraken2(pyusb_handle, 'Some device')
     assert liquidctl_device.device.vendor_id == pyusb_handle.idVendor, \

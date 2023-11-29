@@ -5,7 +5,7 @@ from liquidctl.driver.usb import HidapiDevice
 
 class _mockhidapi:
     @staticmethod
-    def Device():
+    def device():
         return _mockdevice()
 
 
@@ -35,12 +35,44 @@ def dev():
 def test_opens(dev, monkeypatch):
     opened = False
 
+    def is_utf8(str):
+        """
+        Checks if a string is UTF-8 encoded.
+
+        Args:
+          string: The string to check.
+
+        Returns:
+          True if the string is UTF-8 encoded, False otherwise.
+        """
+
+        try:
+            str.decode('utf-8')
+            return True
+        except UnicodeDecodeError:
+            return False
+
     def _open_path(path):
         assert isinstance(path, bytes)
         nonlocal opened
         opened = True
 
+    def _open_vid_pid(vendor_id, product_id):
+        assert isinstance(vendor_id, int)
+        assert isinstance(product_id, int)
+        nonlocal opened
+        opened = True
+
+    def _open_vid_pid_serial(vendor_id, product_id, serial_number):
+        assert isinstance(vendor_id, int)
+        assert isinstance(product_id, int)
+        assert is_utf8(serial_number)
+        nonlocal opened
+        opened = True
+
     monkeypatch.setattr(dev.hiddev, 'open_path', _open_path, raising=False)
+    monkeypatch.setattr(dev.hiddev, 'open', _open_vid_pid, raising=False)
+    monkeypatch.setattr(dev.hiddev, 'open', _open_vid_pid_serial, raising=False)
     dev.open()
     assert opened
 
@@ -112,7 +144,7 @@ def test_reads(dev, monkeypatch):
         assert isinstance(max_length, int)
         assert isinstance(timeout_ms, int)
         assert timeout_ms == CANARY_TIMEOUT_MS, 'use hid_read'
-        return [0xff] + [0]*(max_length - 1)  # report ID is part of max_length *if present*
+        return [0xff] + [0] * (max_length - 1)  # report ID is part of max_length *if present*
 
     monkeypatch.setattr(dev.hiddev, 'set_nonblocking', _set_nonblocking, raising=False)
     monkeypatch.setattr(dev.hiddev, 'read', _read, raising=False)
@@ -134,7 +166,7 @@ def test_gets_feature_report(dev, monkeypatch):
     def _get(report_num, max_length):
         assert isinstance(report_num, int)
         assert isinstance(max_length, int)
-        return [report_num] + [0]*(max_length - 1)  # report ID is (always) part of max_length
+        return [report_num] + [0] * (max_length - 1)  # report ID is (always) part of max_length
 
     monkeypatch.setattr(dev.hiddev, 'get_feature_report', _get, raising=False)
     assert dev.get_feature_report(0xff, 3) == [0xff, 0, 0]
