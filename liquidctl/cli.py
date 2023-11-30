@@ -88,7 +88,6 @@ from liquidctl.driver import *
 from liquidctl.error import LiquidctlError
 from liquidctl.util import color_from_str, fan_mode_parser
 
-
 # conversion from CLI arg to internal option; as options as forwarded to bused
 # and drivers, they must:
 #  - have no default value in the CLI level (not forwarded unless explicitly set);
@@ -153,7 +152,6 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def _list_devices_objs(devices):
-
     def getattr_or(object, name, default=None):
         """Call `getattr` and return `default` on exceptions."""
         try:
@@ -242,7 +240,7 @@ def _dev_status_obj(dev, status):
         if isinstance(val, datetime.timedelta):
             val = val.total_seconds()
             unit = 's'
-        return { 'key': key, 'value': val, 'unit': unit }
+        return {'key': key, 'value': val, 'unit': unit}
 
     # suppress the experimental suffix, `list` reports it in `.experimental`
     return {
@@ -283,8 +281,10 @@ def _device_set_color(dev, args, **opts):
     color = map(color_from_str, args['<color>'])
     dev.set_color(args['<channel>'].lower(), args['<mode>'].lower(), color, **opts)
 
+
 def _device_set_screen(dev, args, **opts):
     dev.set_screen(args["<channel>"], args["<mode>"], args["<value>"], **opts)
+
 
 def _device_set_speed(dev, args, **opts):
     if len(args['<temperature>']) > 0:
@@ -300,6 +300,9 @@ def _make_opts(args):
         if val is not None and arg in _PARSE_ARG:
             opt = arg.replace('--', '').replace('-', '_')
             opts[opt] = _PARSE_ARG[arg](val)
+            if opt == "address" and sys.platform == "win32":
+                if val.startswith("\\\\\\\\?\\\\HID"):
+                    opts[opt] = val.replace('\\\\', '\\')
     return opts
 
 
@@ -393,7 +396,7 @@ def main():
         }
 
     log_fmtter = ColoredFormatter(fmt=log_fmt, stream=sys.stderr,
-                                              log_colors=log_colors)
+                                  log_colors=log_colors)
 
     log_handler = logging.StreamHandler()
     log_handler.setFormatter(log_fmtter)
@@ -486,7 +489,7 @@ def main():
             # usb.core.USBError or PermissionError) for permission issues
             if err.errno in [errno.EACCES, errno.EPERM]:
                 errors.log(f'{dev.description}: insufficient permissions', err=err)
-            elif err.args == ('open failed', ):
+            elif err.args == ('open failed',):
                 errors.log(
                     f'{dev.description}: could not open, possibly due to insufficient permissions',
                     err=err

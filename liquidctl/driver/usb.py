@@ -571,7 +571,7 @@ class HidapiDevice:
 
 
 class HidapiBus(BaseBus):
-    def find_devices(self, vendor=None, product=None, bus=None, address=None,
+    def find_devices(self, vendor=None, product=None, bus=None, address: str = None,
                      usb_port=None, **kwargs):
         """Find compatible HID devices."""
         handles = HidapiDevice.enumerate(hid, vendor, product)
