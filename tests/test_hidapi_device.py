@@ -49,7 +49,7 @@ def test_opens(dev, monkeypatch):
     def _open_vid_pid_serial(vendor_id, product_id, serial_number):
         assert isinstance(vendor_id, int)
         assert isinstance(product_id, int)
-        assert isinstance(serial_number, bytes)
+        assert isinstance(serial_number, str)
         nonlocal opened
         opened = True
 
